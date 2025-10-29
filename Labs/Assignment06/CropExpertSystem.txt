@@ -1,0 +1,50 @@
+% --- 1. KNOWLEDGE BASE (Rules) ---
+% "Recommend Crop X IF conditions Y and Z are met."
+
+recommend(sugarcane) :-
+    property(climate, hot_and_humid),
+    property(rainfall, very_high),
+    property(soil, rich_loam_or_clay).
+
+recommend(grapes) :-
+    property(climate, hot_and_dry_summers),
+    property(sunlight, very_high),
+    property(soil, well_drained_loam).
+
+recommend(soybean) :-
+    property(climate, warm),
+    property(rainfall, medium_to_high),
+    property(soil, loam).
+
+recommend(bitter_gourd) :-
+    property(climate, hot_and_humid),
+    property(rainfall, medium),
+    property(soil, sandy_loam).
+
+
+% --- 2. FACTS (Working Memory) ---
+% These are the observed facts for a specific field.
+%
+% --- CASE 1: Grapes (Currently Active) ---
+property(climate, hot_and_dry_summers).
+property(sunlight, very_high).
+property(soil, well_drained_loam).
+property(rainfall, low). % Extra facts are just ignored
+
+% --- CASE 2: Sugarcane (Comment out Case 1 to try this) ---
+% property(climate, hot_and_humid).
+% property(rainfall, very_high).
+% property(soil, rich_loam_or_clay).
+
+
+% --- 3. INFERENCE ENGINE (The Query) ---
+% We ask the system: "Based on the facts, what crop do you recommend?"
+
+% Query:
+% ?- recommend(Crop).
+
+% Result for Case 1 (currently active):
+% Crop = grapes.
+
+% Result for Case 2:
+% Crop = sugarcane.
