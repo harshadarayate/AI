@@ -1,0 +1,106 @@
+% --- Knowledge Base (Facts) ---
+
+% male(Person)
+male(john).
+male(peter).
+male(david).
+male(chris).
+
+% female(Person)
+female(susan).
+female(mary).
+female(lisa).
+female(ann).
+
+% parent(Parent, Child)
+parent(john, peter).    % John is Peter's parent
+parent(susan, peter).   % Susan is Peter's parent
+parent(john, lisa).     % John is Lisa's parent
+parent(susan, lisa).    % Susan is Lisa's parent
+parent(peter, david).   % Peter is David's parent
+parent(mary, david).    % Mary is David's parent
+parent(peter, ann).     % Peter is Ann's parent
+parent(mary, ann).      % Mary is Ann's parent
+
+
+% --- Rules ---
+
+% Rule 1: F is the father of C
+father(F, C) :-
+    male(F),
+    parent(F, C).
+
+% Rule 2: M is the mother of C
+mother(M, C) :-
+    female(M),
+    parent(M, C).
+
+% Rule 3: GP is the grandparent of GC
+grandparent(GP, GC) :-
+    parent(GP, P),
+    parent(P, GC).
+
+% Rule 4: S1 and S2 are siblings
+sibling(S1, S2) :-
+    parent(P, S1),
+    parent(P, S2),
+    S1 \== S2. % S1 and S2 are not the same person
+
+% Rule 5: B is the brother of S
+brother(B, S) :-
+    male(B),
+    sibling(B, S).
+
+% Rule 6: Sis is the sister of S
+sister(Sis, S) :-
+    female(Sis),
+    sibling(Sis, S).
+
+
+% --- Example Queries and Results ---
+
+% Query 1: Who is the father of Lisa?
+% ?- father(F, lisa).
+% F = john.
+
+% Query 2: Who are David's grandparents?
+% ?- grandparent(GP, david).
+% GP = john ;
+% GP = susan ;
+% GP = john ;
+% GP = susan.
+% (Note: Prolog finds all possible paths, so results may be duplicated)
+
+% Query 3: Who is Peter's sister?
+% ?- sister(Sis, peter).
+% Sis = lisa.
+
+% Query 4: Who are John's children?
+% ?- parent(john, Child).
+% Child = peter ;
+% Child = lisa.
+
+
+-----------------
+father(F, C) :- male(F), parent(F, C).
+Meaning: "F is the father of C if F is male and F is a parent of C."
+
+
+
+Query 1: ?- father(F, lisa).
+
+You ask: "Who is the father of Lisa?" (Find a value for F where father(F, lisa) is true).
+
+Prolog uses the rule: father(F, C) :- male(F), parent(F, C).
+
+It sets C = lisa and tries to solve two sub-goals:
+
+    male(F)
+    parent(F, lisa)
+
+It searches the facts:
+
+    male(john)? Yes. Now check parent(john, lisa)? Yes.
+    Both are true. So, F = john is a solution.
+
+Result: F = john.
